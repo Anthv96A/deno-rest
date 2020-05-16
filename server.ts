@@ -1,7 +1,6 @@
 import { Application } from "https://deno.land/x/oak/mod.ts";
 import router from "./routes/routes.ts";
 
-
 const HOST = 'localhost',
     PORT = 3000;
 
