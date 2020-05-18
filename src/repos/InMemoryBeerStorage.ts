@@ -1,5 +1,6 @@
 import IBeerRepository from "./IBeerRepository.ts";
 import BeerModel from "../models/Beer-Model.ts";
+import Query from './Query.ts';
 import { v4 } from 'https://deno.land/std/uuid/mod.ts';
 
 class InMemoryBeerStorage implements IBeerRepository {
@@ -11,26 +12,23 @@ class InMemoryBeerStorage implements IBeerRepository {
         this.beers.push(beer);
         return await Promise.resolve(beer);
     }
-   async updateBeerAsync(beerId: string, beer: BeerModel): Promise<BeerModel> {
-        const index: number = this.beers.findIndex(b => b.id === beerId);
+   async updateBeerAsync(beer: BeerModel): Promise<BeerModel> {
+        const index: number = this.beers.findIndex(b => b.id === beer.id);
 
         if(index === -1) return await Promise.reject();
-        beer.id = beerId;
         this.beers[index] = beer;
         return await Promise.resolve(beer);
     }
-    async deleteBeerAsync(beerId: string): Promise<any> {
-        const index: number = this.beers.findIndex(b => b.id === beerId);
+    async deleteBeerAsync(query: Query): Promise<any> {
+        const index: number = this.beers.findIndex(b => b.id === query.where.id);
 
-        if(index === -1)
-            return await Promise.reject();
-
-       this.beers.splice(index, 1);
-       await Promise.resolve();
+        if(index === -1)return await Promise.reject();
+        this.beers.splice(index, 1);
+        await Promise.resolve();
     }
 
-    async getBeerAsync(beerId: string): Promise<BeerModel> {
-        const beer = this.beers.find(beer => beer.id === beerId) as BeerModel;
+    async getBeerAsync(query: Query): Promise<BeerModel> {
+        const beer = this.beers.find(beer => beer.id === query.where.id) as BeerModel;
         return await Promise.resolve(beer);
     }
     async getBeersAsync(): Promise<BeerModel[]> {

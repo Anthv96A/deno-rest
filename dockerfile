@@ -13,4 +13,4 @@ WORKDIR /usr/src/app
 COPY . .
 
 EXPOSE 3000
-CMD [ "deno", "run", "--allow-net", "server.ts" ]
+CMD [ "deno", "run", "--allow-net", "--importmap=import-map.json" ,"--unstable", "server.ts" ]

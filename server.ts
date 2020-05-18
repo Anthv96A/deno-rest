@@ -1,5 +1,5 @@
-import { Application } from "https://deno.land/x/oak/mod.ts";
-import router from "./routes/routes.ts";
+import { Application } from "oak/mod.ts";
+import router from "./src/routes/routes.ts";
 
 const HOST = 'localhost',
     PORT = 3000;

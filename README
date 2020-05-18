@@ -1,3 +1,6 @@
+To run 
+deno run --allow-net --importmap=import-map.json --unstable server.ts
+
 Build image
 docker build --no-cache -t deno-example .
 

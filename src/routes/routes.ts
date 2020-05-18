@@ -1,9 +1,13 @@
-import { Router } from "https://deno.land/x/oak/mod.ts";
+import { Router } from "oak/mod.ts";
 import BeerController from '../controllers/BeerController.ts';
-import InMemoryBeerStorage from "../repos/InMemoryBeerStorage.ts";
+import BeerService from '../services/beer/BeerService.ts';
+import IBeerService from '../services/beer/IBeerService.ts';
+import InMemoryBeerStorage from '../repos/InMemoryBeerStorage.ts';
+import IBeerRepository from '../repos/IBeerRepository.ts';
 
-const beerController: BeerController = new BeerController(new InMemoryBeerStorage());
-
+const beerRepo: IBeerRepository = new InMemoryBeerStorage();
+const beerService: IBeerService = new BeerService(beerRepo);
+const beerController: BeerController = new BeerController(beerService);
 
 const router: Router = new Router();
 
