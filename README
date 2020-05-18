@@ -6,6 +6,9 @@ docker build --no-cache -t deno-example .
 
 Start Container from image
 docker run --rm --name first-deno -d -p 127.0.0.1:3000:3000 deno-example:latest
+THIS WORKS ATM WILL CHANGE TO USE NOT HOST NET
+docker run --name first-deno --rm -d --net=host -p 3000:3000 deno-example
+
 
 To inspect the container
 docker exec -it <container id> /bin/bash

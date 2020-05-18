@@ -1,16 +1,15 @@
 FROM ubuntu:latest
-
-RUN apt-get update 
-RUN apt-get install
-RUN apt-get -y install curl
-RUN apt-get -y install unzip
+RUN apt-get update \
+    && apt-get install \
+    && apt-get -y install curl \
+    && apt-get -y install unzip
 RUN curl -fsSL https://deno.land/x/install/install.sh | sh
-
-ENV DENO_INSTALL="/root/.deno"
-ENV PATH="${DENO_INSTALL}/bin:${PATH}"
+ENV PATH="/root/.deno/bin:${PATH}"
 
 WORKDIR /usr/src/app
-COPY . .
+COPY ./src ./src
+COPY import-map.json .
+COPY server.ts .
 
 EXPOSE 3000
 CMD [ "deno", "run", "--allow-net", "--importmap=import-map.json" ,"--unstable", "server.ts" ]
