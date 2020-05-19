@@ -28,7 +28,7 @@ class BeerService implements IBeerService {
             const created: BeerModel = await this._beerRepository.updateBeerAsync(beer);
 
             if(!created)
-                throw new Error('Beer was not created');
+                throw new Error('Beer was not updated');
                 
             return created;
         } catch (error) {
