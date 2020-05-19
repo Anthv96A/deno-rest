@@ -1,32 +1,29 @@
 import IBeerService from "../services/beer/IBeerService.ts";
 import BeerModel from "../models/Beer-Model.ts";
-import { Request, Response, RouteParams } from "oak/mod.ts";
+import { Request, Response, RouteParams, Body } from 'https://deno.land/x/oak/mod.ts';
 
 class BeerController {
     constructor(
-        private readonly _beerService: IBeerService
+        private readonly _beerService: IBeerService 
+        // TODO add in type convertToTypeAsync
     ){}
 
-    async createBeerAsync({ response } : { response: Response }, { request }: { request: Request }){ 
+    async createBeerAsync({ response, request } : { response: Response, request: Request}){ 
         const newBodyBeer = <BeerModel> await this.bodyTransformAsync(request);
         const created: BeerModel = await this._beerService.createAsync(newBodyBeer);
 
         response.status = 201;
-        response.body = {
-            message: `Beer created with ID ${created.id}`
-        }
+        response.body = created;
     }
-    async updateBeerAsync({ response } : { response: Response }, { request }: { request: Request }, { params } : { params: RouteParams }){ 
+    async updateBeerAsync({ response, request, params } : { response: Response, request: Request, params: RouteParams }){ 
         const updatedBeer = <BeerModel> await this.bodyTransformAsync(request, params);
         const result: BeerModel = await this._beerService.updateAsync(updatedBeer);
 
         response.status = 202;
-        response.body = {
-            message: `Beer updated with ID ${result.id}`
-        }
+        response.body = result;
     }
 
-    async deleteBeerAsync({ response } : { response: Response }, { params } : { params: RouteParams }){ 
+    async deleteBeerAsync({ response, params } : { response: Response, params: RouteParams }){ 
         const beerId: string = params.id as string;
         await this._beerService.deleteAsync(beerId);
 
@@ -34,7 +31,7 @@ class BeerController {
         response.body = {};
     }
 
-    async getBeerAsync({ response } : { response: Response }, { params } : { params: RouteParams }){ 
+    async getBeerAsync({ response, params } : { response: Response, params: RouteParams }){ 
         const beerId: string = params.id as string;
         const beer: BeerModel = await this._beerService.getOneAsync(beerId);
 
@@ -49,7 +46,8 @@ class BeerController {
     }
 
     private async bodyTransformAsync(request: Request, params?: RouteParams): Promise<BeerModel> {
-        const tranformed = (await request.body()).value as BeerModel;
+        const body: Body = await request.body()
+        const tranformed = body.value as BeerModel;
         if(params?.id !== undefined)
             tranformed.id = params.id;
     

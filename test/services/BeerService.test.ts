@@ -4,11 +4,12 @@ import IBeerRepository from '../../src/repos/IBeerRepository.ts';
 import Query from '../../src/repos/Query.ts';
 import BeerModel from '../../src/models/Beer-Model.ts';
 import { v4 } from 'https://deno.land/std/uuid/mod.ts';
+import { IBeerRepoCallback, defaultRepoCallback } from '../helpers/unit-helpers.ts';
 
 const test = Deno.test;
 
 test('Creates a new beer', async (): Promise<any> => {
-    const mockRepo = mockBeerRepo(defaultRepoCallback);
+    const mockRepo = mockBeerRepo();
     const beer = {
         name: 'Test',
         origin: 'England'
@@ -21,7 +22,7 @@ test('Creates a new beer', async (): Promise<any> => {
 });
 
 test('Fails to validate on create a new beer with no name', async (): Promise<any> => {
-    const mockRepo: IBeerRepository = mockBeerRepo(defaultRepoCallback);
+    const mockRepo: IBeerRepository = mockBeerRepo();
 
     const beer = {
         name: '',
@@ -37,7 +38,7 @@ test('Fails to validate on create a new beer with no name', async (): Promise<an
 });
 
 test('Fails to validate on create a new beer with no origin', async (): Promise<any> => {
-    const mockRepo: IBeerRepository = mockBeerRepo(defaultRepoCallback);
+    const mockRepo: IBeerRepository = mockBeerRepo();
 
     const beer = {
         name: 'test',
@@ -80,7 +81,7 @@ test('Updates a beer successfully', async () => {
         origin: 'test'
     } as BeerModel;
 
-    const mockRepo: IBeerRepository = mockBeerRepo(defaultRepoCallback);
+    const mockRepo: IBeerRepository = mockBeerRepo();
     const beerService : BeerService = new BeerService(mockRepo);
 
     const result: BeerModel = await beerService.updateAsync(beer);
@@ -89,7 +90,7 @@ test('Updates a beer successfully', async () => {
 });
 
 test('Fails to validate on update a new beer with no origin', async (): Promise<any> => {
-    const mockRepo: IBeerRepository = mockBeerRepo(defaultRepoCallback);
+    const mockRepo: IBeerRepository = mockBeerRepo();
 
     const beer = {
         id: v4.generate(),
@@ -106,7 +107,7 @@ test('Fails to validate on update a new beer with no origin', async (): Promise<
 });
 
 test('Fails to validate on update a new beer with no name', async (): Promise<any> => {
-    const mockRepo: IBeerRepository = mockBeerRepo(defaultRepoCallback);
+    const mockRepo: IBeerRepository = mockBeerRepo();
 
     const beer = {
         id: v4.generate(),
@@ -289,7 +290,7 @@ test('Gets all beers', async () => {
 })
 
 
-function mockBeerRepo(config: IBeerRepoCallback) : IBeerRepository {
+function mockBeerRepo(config: IBeerRepoCallback = defaultRepoCallback) : IBeerRepository {
     const mock = {
         createBeerAsync : async (beer: BeerModel) => await Promise.resolve(beer),
         updateBeerAsync : async (beer: BeerModel) => await Promise.resolve(beer),
@@ -298,12 +299,7 @@ function mockBeerRepo(config: IBeerRepoCallback) : IBeerRepository {
         getBeersAsync : async () => await Promise.resolve([] as BeerModel[]),
     } as IBeerRepository;
 
-
     config(mock);
     
     return mock;
 }
-
-function defaultRepoCallback(repo: IBeerRepository) : void {}
-
-type IBeerRepoCallback = (repo: IBeerRepository) => void;
