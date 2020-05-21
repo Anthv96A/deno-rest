@@ -1,14 +1,13 @@
 import { Application } from "oak/mod.ts";
 import router from "./src/routes/routes.ts";
 
-const HOST = 'localhost',
-    PORT = 3000;
+const port = 3000;
 
 const app = new Application();
 
 app.use(router.routes());
 app.use(router.allowedMethods());
 
-console.log(`Listening on port:${PORT}...`);
+console.log(`Listening on port:${port}...`);
 
-await app.listen(`${HOST}:${PORT}`);
+await app.listen({port});
