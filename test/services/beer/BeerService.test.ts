@@ -1,15 +1,15 @@
 import { assertEquals } from "https://deno.land/std/testing/asserts.ts";
-import BeerService from '../../src/services/beer/BeerService.ts';
-import IBeerRepository from '../../src/repos/IBeerRepository.ts';
-import Query from '../../src/repos/Query.ts';
-import BeerModel from '../../src/models/Beer-Model.ts';
+import BeerService from '../../../src/services/beer/BeerService.ts';
+import IBeerRepository from '../../../src/repos/IBeerRepository.ts';
+import Query from '../../../src/repos/Query.ts';
+import BeerModel from '../../../src/models/Beer-Model.ts';
 import { v4 } from 'https://deno.land/std/uuid/mod.ts';
-import { IBeerRepoCallback, defaultRepoCallback } from '../helpers/unit-helpers.ts';
+import { mockIBeerRepository } from '../../helpers/unit-helpers.ts';
 
 const test = Deno.test;
 
 test('Creates a new beer', async (): Promise<any> => {
-    const mockRepo = mockBeerRepo();
+    const mockRepo = mockIBeerRepository();
     const beer = {
         name: 'Test',
         origin: 'England'
@@ -22,7 +22,7 @@ test('Creates a new beer', async (): Promise<any> => {
 });
 
 test('Fails to validate on create a new beer with no name', async (): Promise<any> => {
-    const mockRepo: IBeerRepository = mockBeerRepo();
+    const mockRepo: IBeerRepository = mockIBeerRepository();
 
     const beer = {
         name: '',
@@ -38,7 +38,7 @@ test('Fails to validate on create a new beer with no name', async (): Promise<an
 });
 
 test('Fails to validate on create a new beer with no origin', async (): Promise<any> => {
-    const mockRepo: IBeerRepository = mockBeerRepo();
+    const mockRepo: IBeerRepository = mockIBeerRepository();
 
     const beer = {
         name: 'test',
@@ -54,7 +54,7 @@ test('Fails to validate on create a new beer with no origin', async (): Promise<
 });
 
 test('Fails to save on create a new beer', async (): Promise<any> => {
-    const mockRepo: IBeerRepository = mockBeerRepo((mock: IBeerRepository) => {
+    const mockRepo: IBeerRepository = mockIBeerRepository((mock: IBeerRepository) => {
         mock.createBeerAsync = async (beer: BeerModel) => {  
             const result = await Promise.resolve(null);
             return result as any;
@@ -81,7 +81,7 @@ test('Updates a beer successfully', async () => {
         origin: 'test'
     } as BeerModel;
 
-    const mockRepo: IBeerRepository = mockBeerRepo();
+    const mockRepo: IBeerRepository = mockIBeerRepository();
     const beerService : BeerService = new BeerService(mockRepo);
 
     const result: BeerModel = await beerService.updateAsync(beer);
@@ -90,7 +90,7 @@ test('Updates a beer successfully', async () => {
 });
 
 test('Fails to validate on update a new beer with no origin', async (): Promise<any> => {
-    const mockRepo: IBeerRepository = mockBeerRepo();
+    const mockRepo: IBeerRepository = mockIBeerRepository();
 
     const beer = {
         id: v4.generate(),
@@ -107,7 +107,7 @@ test('Fails to validate on update a new beer with no origin', async (): Promise<
 });
 
 test('Fails to validate on update a new beer with no name', async (): Promise<any> => {
-    const mockRepo: IBeerRepository = mockBeerRepo();
+    const mockRepo: IBeerRepository = mockIBeerRepository();
 
     const beer = {
         id: v4.generate(),
@@ -124,7 +124,7 @@ test('Fails to validate on update a new beer with no name', async (): Promise<an
 });
 
 test('Fails to update a beer', async (): Promise<any> => {
-    const mockRepo: IBeerRepository = mockBeerRepo((mock: IBeerRepository) => {
+    const mockRepo: IBeerRepository = mockIBeerRepository((mock: IBeerRepository) => {
         mock.updateBeerAsync = async (beer: BeerModel) => await Promise.resolve(null) as any;
     });
 
@@ -145,7 +145,7 @@ test('Fails to update a beer', async (): Promise<any> => {
 test('Deletes a beer', async () => {
     const idToTest: string = v4.generate();
     let counter: number = 0;
-    const mockRepo: IBeerRepository = mockBeerRepo((mock: IBeerRepository) => {
+    const mockRepo: IBeerRepository = mockIBeerRepository((mock: IBeerRepository) => {
         mock.deleteBeerAsync = async (query: Query) => {
             counter++;
             return query.where.id === idToTest ? await Promise.resolve(): await Promise.reject(new Error('Not Found'));
@@ -161,7 +161,7 @@ test('Deletes a beer', async () => {
 test('Unable to delete beer when not found', async () => {
     const id: string = v4.generate();
     let counter: number = 0;
-    const mockRepo: IBeerRepository = mockBeerRepo((mock: IBeerRepository) => {
+    const mockRepo: IBeerRepository = mockIBeerRepository((mock: IBeerRepository) => {
         mock.deleteBeerAsync = async (query: Query) => {
             counter++;
             return query.where.id === id ? await Promise.resolve(): await Promise.reject(new Error('Not Found'));
@@ -187,7 +187,7 @@ test('Gets a beer', async () => {
         origin: 'origin'
     } as BeerModel;
 
-    const mockRepo: IBeerRepository = mockBeerRepo((mock: IBeerRepository) => {
+    const mockRepo: IBeerRepository = mockIBeerRepository((mock: IBeerRepository) => {
         mock.getBeerAsync = async (query: Query) => {
             counter++;
             return query.where.id === idToTest ? await Promise.resolve(beer): await Promise.reject(new Error('Not Found'));
@@ -210,7 +210,7 @@ test('Gets a beer', async () => {
         origin: 'origin'
     } as BeerModel;
 
-    const mockRepo: IBeerRepository = mockBeerRepo((mock: IBeerRepository) => {
+    const mockRepo: IBeerRepository = mockIBeerRepository((mock: IBeerRepository) => {
         mock.getBeerAsync = async (query: Query) => {
             counter++;
             return query.where.id === idToTest ? await Promise.resolve(beer): await Promise.reject(new Error('Not Found'));
@@ -233,7 +233,7 @@ test('Fails to get a beer', async () => {
         origin: 'origin'
     } as BeerModel;
 
-    const mockRepo: IBeerRepository = mockBeerRepo((mock: IBeerRepository) => {
+    const mockRepo: IBeerRepository = mockIBeerRepository((mock: IBeerRepository) => {
         mock.getBeerAsync = async (query: Query) => {
             counter++;
             return query.where.id === idToTest ? await Promise.resolve(beer): await Promise.resolve(null) as any;
@@ -254,7 +254,7 @@ test('Fails to get a beer with bad repo', async () => {
     const idToTest: string = v4.generate();
     let counter: number = 0;
 
-    const mockRepo: IBeerRepository = mockBeerRepo((mock: IBeerRepository) => {
+    const mockRepo: IBeerRepository = mockIBeerRepository((mock: IBeerRepository) => {
         mock.getBeerAsync = async (query: Query) => {
             counter++;
             return await Promise.reject(new Error('An error occurred'));
@@ -278,7 +278,7 @@ test('Gets all beers', async () => {
         { name: 'test3', origin: 'test3', id: v4.generate()},
     ];
 
-    const mockRepo: IBeerRepository = mockBeerRepo((mock: IBeerRepository) => {
+    const mockRepo: IBeerRepository = mockIBeerRepository((mock: IBeerRepository) => {
         mock.getBeersAsync = async () => await Promise.resolve(expectedBeers);
     });
 
@@ -287,19 +287,4 @@ test('Gets all beers', async () => {
     const actualBeers: BeerModel[] = await beerService.getAsync();
 
     assertEquals(actualBeers, expectedBeers);
-})
-
-
-function mockBeerRepo(config: IBeerRepoCallback = defaultRepoCallback) : IBeerRepository {
-    const mock = {
-        createBeerAsync : async (beer: BeerModel) => await Promise.resolve(beer),
-        updateBeerAsync : async (beer: BeerModel) => await Promise.resolve(beer),
-        deleteBeerAsync : async (query: Query) => await Promise.resolve(),
-        getBeerAsync : async (query: Query) => await Promise.resolve({} as BeerModel),
-        getBeersAsync : async () => await Promise.resolve([] as BeerModel[]),
-    } as IBeerRepository;
-
-    config(mock);
-    
-    return mock;
-}
+});

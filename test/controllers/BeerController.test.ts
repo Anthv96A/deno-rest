@@ -4,16 +4,7 @@ import BeerController from '../../src/controllers/BeerController.ts';
 import BeerModel from '../../src/models/Beer-Model.ts';
 import { v4 } from 'https://deno.land/std/uuid/mod.ts';
 import { Request, Response, RouteParams, Body } from 'https://deno.land/x/oak/mod.ts';
-import { 
-    IBeerServiceCallback,
-    RequestCallback,
-    ResponseCallback, 
-    RouteParamsCallback,
-    defaultRequestCallback,
-    defaultResponseCallback,
-    defaultRouteParamsCallback,
-    defaultBeerServiceCallback
- } from '../helpers/unit-helpers.ts';
+import { mockBeerService, mockRequest, mockResponse, mockRouteParams } from '../helpers/unit-helpers.ts';
 
 const test = Deno.test;
 
@@ -122,38 +113,4 @@ test('Gets all beers and returns a status of 200', async () => {
     assertEquals(res.status, 200);
     assertEquals(res.body, beer);
 });
-
-function mockRequest(config: RequestCallback = defaultRequestCallback): Request {
-    const mock = {} as Request;
-
-    config(mock);
-    return mock;
-}
-
-function mockResponse(config: ResponseCallback = defaultResponseCallback): Response {
-    const mock = {} as Response;
-
-    config(mock);
-    return mock;
-}
-
-function mockRouteParams(config: RouteParamsCallback = defaultRouteParamsCallback): RouteParams {
-    const mock = {} as RouteParams;
-
-    config(mock);
-    return mock;
-}
-
-function mockBeerService(config: IBeerServiceCallback = defaultBeerServiceCallback): IBeerService {
-    const mock = {
-        getAsync: async () => await Promise.resolve([] as BeerModel[]),
-        getOneAsync: async (id: string) => await Promise.resolve({}) as BeerModel,
-        createAsync: async(beer: BeerModel) => await Promise.resolve(beer),
-        updateAsync: async(beer: BeerModel) => await Promise.resolve(beer),
-        deleteAsync: async(id: string) => await Promise.resolve()
-    } as IBeerService;
-
-    config(mock);
-    return mock;
-}
 
