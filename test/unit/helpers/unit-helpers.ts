@@ -1,7 +1,7 @@
-import IBeerService from '../../src/services/beer/IBeerService.ts';
-import IBeerRepository from '../../src/repos/IBeerRepository.ts';
-import Query from '../../src/repos/Query.ts';
-import BeerModel from '../../src/models/BeerModel.ts';
+import IBeerService from '../../../src/services/beer/IBeerService.ts';
+import IBeerRepository from '../../../src/repos/IBeerRepository.ts';
+import Query from '../../../src/repos/Query.ts';
+import BeerModel from '../../../src/models/BeerModel.ts';
 import { Request, Response, RouteParams } from 'https://deno.land/x/oak/mod.ts';
 
 type IBeerServiceCallback = (beerService: IBeerService) => void;
