@@ -7,7 +7,7 @@ import { Request, RouteParams } from 'https://deno.land/x/oak/mod.ts';
 class BeerController extends BaseController<BeerModel, IBeerService> {
 
     constructor(service: IBeerService, typeConverter: ITypeConverter){
-        super(service, typeConverter)
+        super(service, typeConverter);
     }
 
     protected async onCreateAsync(request: Request): Promise<BeerModel> {

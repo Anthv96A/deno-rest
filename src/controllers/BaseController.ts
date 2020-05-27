@@ -9,35 +9,35 @@ abstract class BaseController<T, ISevice extends ICrudService<T>> {
         protected readonly _typeConverter: ITypeConverter
     ){}
 
-    async createAsync({ response, request } : { response: Response, request: Request }){ 
+    async createAsync({ response, request }: { response: Response, request: Request }){ 
         const created: T = await this.onCreateAsync(request);
         
         response.status = 201;
         response.body = created;
     }
 
-    async updateAsync({ response, request, params } : { response: Response, request: Request, params: RouteParams }){ 
+    async updateAsync({ response, request, params }: { response: Response, request: Request, params: RouteParams }){ 
         const updated: T = await this.onUpdateAsync(request, params);
 
         response.status = 202;
         response.body = updated;
     }
 
-    async deleteAsync({ response, params } : { response: Response, params: RouteParams }){ 
+    async deleteAsync({ response, params }: { response: Response, params: RouteParams }){ 
         await this.onDeleteAsync(params);
 
         response.status = 204;
         response.body = {};
     }
 
-    async getOneAsync({ response, params } : { response: Response, params: RouteParams }){ 
+    async getOneAsync({ response, params }: { response: Response, params: RouteParams }){ 
         const model: T = await this.onGetOneAsync(params);
 
         response.status = 200;
         response.body = model;
     }
 
-    async getAsync({ response } : { response: Response }){ 
+    async getAsync({ response }: { response: Response }){ 
         const models: T[] = await this.onGetAsync();
 
         response.status = 200;
