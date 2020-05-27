@@ -17,7 +17,7 @@ class BeerController extends BaseController<BeerModel, IBeerService> {
 
     protected async onUpdateAsync(request: Request, params: RouteParams): Promise<BeerModel> {
         const updatedBeer: BeerModel = await this._typeConverter.convertToTypeAsync(request, BeerModel);
-        if(updatedBeer.id === undefined) updatedBeer.id = params.id;
+        if(updatedBeer?.id?.trim() === '') updatedBeer.id = params.id as string;
         return await this._service.updateAsync(updatedBeer);
     }
 
@@ -26,11 +26,14 @@ class BeerController extends BaseController<BeerModel, IBeerService> {
     }
 
     protected async onGetOneAsync(id: string): Promise<BeerModel> {
-        return await this._service.getOneAsync(id);
+        const result = await this._service.getOneAsync(id);
+        return this._typeConverter.convertToTypeAsync(result, BeerModel);
     }
 
     protected async onGetAsync(): Promise<BeerModel[]> {
-        return await this._service.getAsync();
+        const results: BeerModel[] = await this._service.getAsync();
+        const promises: Promise<BeerModel>[] = results.map(bm => this._typeConverter.convertToTypeAsync(bm, BeerModel));
+        return await Promise.all(promises);
     }
 }
 

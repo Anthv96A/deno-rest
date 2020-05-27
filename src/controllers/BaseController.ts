@@ -44,7 +44,7 @@ abstract class BaseController<T extends BaseModel, IService extends ICrudService
 
     async getAsync({ response }: { response: Response }){ 
         const models: T[] = await this.onGetAsync();
-
+        
         response.status = 200;
         response.body = { resources: models };
     }

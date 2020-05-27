@@ -9,7 +9,7 @@ import InMemoryBeerStorage from '../repos/inmemory/InMemoryBeerStorage.ts';
 import IBeerRepository from '../repos/IBeerRepository.ts';
 
 const typeConverter: ITypeConverter = new HttpTypeConverter();
-const beerRepo: IBeerRepository = new InMemoryBeerStorage();
+const beerRepo: IBeerRepository = new MongoRepository();
 const beerService: IBeerService = new BeerService(beerRepo);
 const beerController: BeerController = new BeerController(beerService, typeConverter);
 
