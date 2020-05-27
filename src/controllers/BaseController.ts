@@ -1,8 +1,9 @@
 import ICrudService from '../services/ICrudService.ts';
 import ITypeConverter from '../services/TypeConverter/ITypeConverter.ts';
 import { Request, Response, RouteParams } from 'https://deno.land/x/oak/mod.ts';
+import BaseModel from '../models/BaseModel.ts';
 
-abstract class BaseController<T, ISevice extends ICrudService<T>> {
+abstract class BaseController<T extends BaseModel, ISevice extends ICrudService<T>> {
 
     constructor(
         protected readonly _service: ISevice,

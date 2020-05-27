@@ -1,5 +1,6 @@
-class BeerModel { 
-    id?: string;
+import BaseModel from './BaseModel.ts';
+
+class BeerModel extends BaseModel { 
     name: string = '';
     origin: string = '';
 }
