@@ -38,7 +38,7 @@ class BeerService implements IBeerService {
     async deleteAsync(id: string): Promise<any> {
         try {
             const query = new Query();
-            query.where = { id: id };
+            query.where = { _id: id };
             await this._beerRepository.deleteBeerAsync(query);
         } catch (error) {
             throw error;
@@ -47,7 +47,7 @@ class BeerService implements IBeerService {
     async getOneAsync(id: string): Promise<BeerModel>{
         try {
             const query = new Query();
-            query.where = { id: id };
+            query.where = { _id: id };
             
             const beer: BeerModel = await this._beerRepository.getBeerAsync(query);
             if(!beer)

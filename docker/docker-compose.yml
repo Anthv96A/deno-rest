@@ -1,0 +1,21 @@
+version: '2'
+
+services: 
+    deno-beers: 
+        container_name: deno-beers
+        build: 
+            context: .
+            dockerfile: dockerfile
+        ports: 
+            - "8080:8080"
+        networks: 
+            - deno-network
+    mongodb:
+        container_name: mongo
+        image: mongo
+        networks: 
+            - deno-network
+
+networks: 
+    deno-network:
+        driver: bridge

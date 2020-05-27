@@ -9,7 +9,7 @@
         "request": "launch",
         "cwd": "${workspaceFolder}",
         "runtimeExecutable": "deno",
-        "runtimeArgs": ["--inspect", "--allow-net", "server.ts"],
+        "runtimeArgs": ["--inspect", "--allow-all", "server.ts"],
         "port": 9229
     },{
         "name": "Unit",

@@ -148,7 +148,7 @@ test('Deletes a beer', async () => {
     const mockRepo: IBeerRepository = mockIBeerRepository((mock: IBeerRepository) => {
         mock.deleteBeerAsync = async (query: Query) => {
             counter++;
-            return query.where.id === idToTest ? await Promise.resolve(): await Promise.reject(new Error('Not Found'));
+            return query.where._id === idToTest ? await Promise.resolve(): await Promise.reject(new Error('Not Found'));
         }
     });
 
@@ -164,7 +164,7 @@ test('Unable to delete beer when not found', async () => {
     const mockRepo: IBeerRepository = mockIBeerRepository((mock: IBeerRepository) => {
         mock.deleteBeerAsync = async (query: Query) => {
             counter++;
-            return query.where.id === id ? await Promise.resolve(): await Promise.reject(new Error('Not Found'));
+            return query.where._id === id ? await Promise.resolve(): await Promise.reject(new Error('Not Found'));
         }
     });
     const noneMatchingId: string = v4.generate();
@@ -190,7 +190,7 @@ test('Gets a beer', async () => {
     const mockRepo: IBeerRepository = mockIBeerRepository((mock: IBeerRepository) => {
         mock.getBeerAsync = async (query: Query) => {
             counter++;
-            return query.where.id === idToTest ? await Promise.resolve(beer): await Promise.reject(new Error('Not Found'));
+            return query.where._id === idToTest ? await Promise.resolve(beer): await Promise.reject(new Error('Not Found'));
         }
     });
 
@@ -213,7 +213,7 @@ test('Gets a beer', async () => {
     const mockRepo: IBeerRepository = mockIBeerRepository((mock: IBeerRepository) => {
         mock.getBeerAsync = async (query: Query) => {
             counter++;
-            return query.where.id === idToTest ? await Promise.resolve(beer): await Promise.reject(new Error('Not Found'));
+            return query.where._id === idToTest ? await Promise.resolve(beer): await Promise.reject(new Error('Not Found'));
         }
     });
 
@@ -236,7 +236,7 @@ test('Fails to get a beer', async () => {
     const mockRepo: IBeerRepository = mockIBeerRepository((mock: IBeerRepository) => {
         mock.getBeerAsync = async (query: Query) => {
             counter++;
-            return query.where.id === idToTest ? await Promise.resolve(beer): await Promise.resolve(null) as any;
+            return query.where._id === idToTest ? await Promise.resolve(beer): await Promise.resolve(null) as any;
         }
     });
 
