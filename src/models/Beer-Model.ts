@@ -1,7 +1,7 @@
-interface BeerModel { 
+class BeerModel { 
     id?: string;
-    name: string;
-    origin: string;
+    name: string = '';
+    origin: string = '';
 }
 
 export default BeerModel;

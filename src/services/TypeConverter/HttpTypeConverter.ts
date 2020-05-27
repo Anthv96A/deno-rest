@@ -1,26 +1,28 @@
 import ITypeConverter from './ITypeConverter.ts';
-import { Request, Body } from 'https://deno.land/x/oak/mod.ts';
+import { Request } from 'https://deno.land/x/oak/mod.ts';
 
 class HttpTypeConverter implements ITypeConverter {
-    async convertToTypeAsync<T>(request: Request) : Promise<T> {
+    async convertToTypeAsync<T extends Object>(request: Request, type: (new () => T)) : Promise<T> {
         try {
-             const model = {} as T;
-             const body: Body = await request.body();  
-             const valueKeys: string[] = Object.keys(body.value);
-             valueKeys.forEach((vk: any) => {
-                try {
-                    createProp(model, vk, body.value);
-                } catch{}
-             });
-            return model;
+            const actual: any = (await request.body()).value;  
+            const keys: string[] = Object.keys(actual);
+            const instance: T = this.createInstance<T>(type)
+
+            keys.forEach((k: any) => this.createProp(instance, k, actual));
+        
+            return instance;
         } catch {
             return await Promise.resolve({} as T);
         }
     }
-}
 
-function createProp<T, K extends keyof T>(target: T, key: K, value: any){
-    target[key] = value[key];
+    private createInstance<T>(type: (new () => T)) : T {
+        return new type();
+    }
+    private createProp<T, K extends keyof T>(target: T, key: K, value: T){
+        if(key in target)
+            target[key] = value[key];
+    }    
 }
 
 export default HttpTypeConverter;

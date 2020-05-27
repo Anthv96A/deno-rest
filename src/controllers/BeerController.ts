@@ -1,22 +1,24 @@
 import IBeerService from "../services/beer/IBeerService.ts";
+import ITypeConverter from "../services/TypeConverter/ITypeConverter.ts";
 import BeerModel from "../models/Beer-Model.ts";
 import { Request, Response, RouteParams, Body } from 'https://deno.land/x/oak/mod.ts';
 
 class BeerController {
     constructor(
-        private readonly _beerService: IBeerService 
-        // TODO add in type convertToTypeAsync
+        private readonly _beerService: IBeerService,
+        private readonly _typeConverter: ITypeConverter
     ){}
 
     async createBeerAsync({ response, request } : { response: Response, request: Request}){ 
-        const newBodyBeer = <BeerModel> await this.bodyTransformAsync(request);
+        const newBodyBeer = <BeerModel> await this._typeConverter.convertToTypeAsync(request, BeerModel);
         const created: BeerModel = await this._beerService.createAsync(newBodyBeer);
 
         response.status = 201;
         response.body = created;
     }
     async updateBeerAsync({ response, request, params } : { response: Response, request: Request, params: RouteParams }){ 
-        const updatedBeer = <BeerModel> await this.bodyTransformAsync(request, params);
+        const updatedBeer = <BeerModel> await this._typeConverter.convertToTypeAsync(request, BeerModel);
+        if(updatedBeer.id === undefined) updatedBeer.id = params.id;
         const result: BeerModel = await this._beerService.updateAsync(updatedBeer);
 
         response.status = 202;
@@ -43,15 +45,6 @@ class BeerController {
 
         response.status = 200;
         response.body = { resources: beers };
-    }
-
-    private async bodyTransformAsync(request: Request, params?: RouteParams): Promise<BeerModel> {
-        const body: Body = await request.body()
-        const tranformed = body.value as BeerModel;
-        if(params?.id !== undefined)
-            tranformed.id = params.id;
-    
-        return tranformed;
     }
 }
 

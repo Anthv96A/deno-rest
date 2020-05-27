@@ -1,5 +1,6 @@
 import { assertEquals } from "https://deno.land/std/testing/asserts.ts";
 import IBeerService from '../../src/services/beer/IBeerService.ts';
+import HttpTypeConverter from '../../src/services/TypeConverter/HttpTypeConverter.ts';
 import BeerController from '../../src/controllers/BeerController.ts';
 import BeerModel from '../../src/models/Beer-Model.ts';
 import { v4 } from 'https://deno.land/std/uuid/mod.ts';
@@ -24,7 +25,7 @@ test('Create a new beer and returns a status of 201', async () => {
         }
     });
 
-    const beerController: BeerController = new BeerController(beerService);
+    const beerController: BeerController = new BeerController(beerService, new HttpTypeConverter());
 
     await beerController.createBeerAsync(context);
 
@@ -48,7 +49,7 @@ test('Updates an existing beer and returns a status of 202', async () => {
         mock.updateAsync = async (beer: BeerModel) => beer.id === undefined ? await Promise.reject('Not found') : await Promise.resolve(updatedBeer);
     });
 
-    const beerController: BeerController = new BeerController(beerService);
+    const beerController: BeerController = new BeerController(beerService, new HttpTypeConverter());
 
     await beerController.updateBeerAsync(context);
 
@@ -67,7 +68,7 @@ test('Deletes a beer and returns a status of 204', async () => {
         mock.deleteAsync = async (beerId: string) => beerId === undefined ? await Promise.reject('Not found') : await Promise.resolve();
     });
 
-    const beerController: BeerController = new BeerController(beerService);
+    const beerController: BeerController = new BeerController(beerService, new HttpTypeConverter());
 
     await beerController.deleteBeerAsync(context);
 
@@ -87,7 +88,7 @@ test('Gets a beer and returns a status of 200', async () => {
         mock.getAsync = async () => await Promise.resolve(beers)
     });
 
-    const beerController: BeerController = new BeerController(beerService);
+    const beerController: BeerController = new BeerController(beerService, new HttpTypeConverter());
 
     await beerController.getBeersAsync(context);
 
@@ -106,7 +107,7 @@ test('Gets all beers and returns a status of 200', async () => {
         mock.getOneAsync = async (beerId: string) => beerId === undefined ? await Promise.reject('Not found') : await Promise.resolve(beer);
     });
 
-    const beerController: BeerController = new BeerController(beerService);
+    const beerController: BeerController = new BeerController(beerService, new HttpTypeConverter());
 
     await beerController.getBeerAsync(context);
 
