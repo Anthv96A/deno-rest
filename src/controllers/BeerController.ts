@@ -1,7 +1,7 @@
 import IBeerService from "../services/beer/IBeerService.ts";
 import ITypeConverter from "../services/TypeConverter/ITypeConverter.ts";
 import BeerModel from "../models/BeerModel.ts";
-import { Request, Response, RouteParams, Body } from 'https://deno.land/x/oak/mod.ts';
+import { Request, Response, RouteParams } from 'https://deno.land/x/oak/mod.ts';
 
 class BeerController {
     constructor(

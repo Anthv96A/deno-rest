@@ -1,5 +1,5 @@
 import IBeerRepository from "./IBeerRepository.ts";
-import BeerModel from "../models/Beer-Model.ts";
+import BeerModel from "../models/BeerModel.ts";
 import Query from './Query.ts';
 import { v4 } from 'https://deno.land/std/uuid/mod.ts';
 
