@@ -27,7 +27,7 @@ test('Create a new beer and returns a status of 201', async () => {
 
     const beerController: BeerController = new BeerController(beerService, new HttpTypeConverter());
 
-    await beerController.createBeerAsync(context);
+    await beerController.createAsync(context);
 
     assertEquals(res.status, 201);
     assertEquals(res.body, createdBeer);
@@ -51,7 +51,7 @@ test('Updates an existing beer and returns a status of 202', async () => {
 
     const beerController: BeerController = new BeerController(beerService, new HttpTypeConverter());
 
-    await beerController.updateBeerAsync(context);
+    await beerController.updateAsync(context);
 
     assertEquals(res.status, 202);
     assertEquals(res.body, updatedBeer);
@@ -70,7 +70,7 @@ test('Deletes a beer and returns a status of 204', async () => {
 
     const beerController: BeerController = new BeerController(beerService, new HttpTypeConverter());
 
-    await beerController.deleteBeerAsync(context);
+    await beerController.deleteAsync(context);
 
     assertEquals(res.status, 204);
 });
@@ -90,7 +90,7 @@ test('Gets a beer and returns a status of 200', async () => {
 
     const beerController: BeerController = new BeerController(beerService, new HttpTypeConverter());
 
-    await beerController.getBeersAsync(context);
+    await beerController.getAsync(context);
 
     assertEquals(res.status, 200);
     assertEquals(res.body.resources, beers);
@@ -109,7 +109,7 @@ test('Gets all beers and returns a status of 200', async () => {
 
     const beerController: BeerController = new BeerController(beerService, new HttpTypeConverter());
 
-    await beerController.getBeerAsync(context);
+    await beerController.getOneAsync(context);
 
     assertEquals(res.status, 200);
     assertEquals(res.body, beer);

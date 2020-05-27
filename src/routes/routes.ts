@@ -15,10 +15,10 @@ const beerController: BeerController = new BeerController(beerService, typeConve
 const router: Router = new Router();
 
 router
-    .get('/beers', beerController.getBeersAsync.bind(beerController))
-    .get('/beers/:id', beerController.getBeerAsync.bind(beerController))
-    .post('/beers', beerController.createBeerAsync.bind(beerController))
-    .put('/beers/:id', beerController.updateBeerAsync.bind(beerController))
-    .delete('/beers/:id', beerController.deleteBeerAsync.bind(beerController));
+    .get('/beers', beerController.getAsync.bind(beerController))
+    .get('/beers/:id', beerController.getOneAsync.bind(beerController))
+    .post('/beers', beerController.createAsync.bind(beerController))
+    .put('/beers/:id', beerController.updateAsync.bind(beerController))
+    .delete('/beers/:id', beerController.deleteAsync.bind(beerController));
 
 export default router;

@@ -1,50 +1,39 @@
+import BaseController from './BaseController.ts';
 import IBeerService from "../services/beer/IBeerService.ts";
 import ITypeConverter from "../services/TypeConverter/ITypeConverter.ts";
 import BeerModel from "../models/BeerModel.ts";
-import { Request, Response, RouteParams } from 'https://deno.land/x/oak/mod.ts';
+import { Request, RouteParams } from 'https://deno.land/x/oak/mod.ts';
 
-class BeerController {
-    constructor(
-        private readonly _beerService: IBeerService,
-        private readonly _typeConverter: ITypeConverter
-    ){}
+class BeerController extends BaseController<BeerModel, IBeerService> {
 
-    async createBeerAsync({ response, request } : { response: Response, request: Request}){ 
-        const newBodyBeer = <BeerModel> await this._typeConverter.convertToTypeAsync(request, BeerModel);
-        const created: BeerModel = await this._beerService.createAsync(newBodyBeer);
-
-        response.status = 201;
-        response.body = created;
+    private readonly _typeConverter: ITypeConverter;
+    
+    constructor(service: IBeerService, typeConverter: ITypeConverter){
+        super(service)
+        this._typeConverter = typeConverter;
     }
-    async updateBeerAsync({ response, request, params } : { response: Response, request: Request, params: RouteParams }){ 
+
+    protected async onCreateAsync(request: Request): Promise<BeerModel> {
+        const newBodyBeer = <BeerModel> await this._typeConverter.convertToTypeAsync(request, BeerModel);
+        return await this._service.createAsync(newBodyBeer);
+    }
+
+    protected async onUpdateAsync(request: Request, params: RouteParams): Promise<BeerModel> {
         const updatedBeer = <BeerModel> await this._typeConverter.convertToTypeAsync(request, BeerModel);
         if(updatedBeer.id === undefined) updatedBeer.id = params.id;
-        const result: BeerModel = await this._beerService.updateAsync(updatedBeer);
-
-        response.status = 202;
-        response.body = result;
+        return await this._service.updateAsync(updatedBeer);
     }
 
-    async deleteBeerAsync({ response, params } : { response: Response, params: RouteParams }){ 
-        const beerId: string = params.id as string;
-        await this._beerService.deleteAsync(beerId);
-
-        response.status = 204;
-        response.body = {};
+    protected async onDeleteAsync(params: RouteParams): Promise<any> {
+        await this._service.deleteAsync(<string> params.id);
     }
 
-    async getBeerAsync({ response, params } : { response: Response, params: RouteParams }){ 
-        const beerId: string = params.id as string;
-        const beer: BeerModel = await this._beerService.getOneAsync(beerId);
-
-        response.status = 200;
-        response.body = beer;
+    protected async onGetOneAsync(params: RouteParams): Promise<BeerModel> {
+        return await this._service.getOneAsync(<string> params.id);
     }
-    async getBeersAsync({ response } : { response: Response }){ 
-        const beers: BeerModel[] = await this._beerService.getAsync();
 
-        response.status = 200;
-        response.body = { resources: beers };
+    protected async onGetAsync(): Promise<BeerModel[]> {
+        return await this._service.getAsync();
     }
 }
 
