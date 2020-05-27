@@ -2,7 +2,7 @@ import { assertEquals } from "https://deno.land/std/testing/asserts.ts";
 import BeerService from '../../../src/services/beer/BeerService.ts';
 import IBeerRepository from '../../../src/repos/IBeerRepository.ts';
 import Query from '../../../src/repos/Query.ts';
-import BeerModel from '../../../src/models/Beer-Model.ts';
+import BeerModel from '../../../src/models/BeerModel.ts';
 import { v4 } from 'https://deno.land/std/uuid/mod.ts';
 import { mockIBeerRepository } from '../../helpers/unit-helpers.ts';
 

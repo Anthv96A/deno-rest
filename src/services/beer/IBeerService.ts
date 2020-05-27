@@ -1,4 +1,4 @@
-import BeerModel from '../../models/Beer-Model.ts';
+import BeerModel from '../../models/BeerModel.ts';
 import ICrudService from '../ICrudService.ts';
 
 interface IBeerService extends ICrudService<BeerModel>{}

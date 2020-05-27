@@ -1,7 +1,7 @@
 import IBeerService from './IBeerService.ts';
 import IBeerRepository from '../../repos/IBeerRepository.ts';
 import Query from '../../repos/Query.ts';
-import BeerModel from '../../models/Beer-Model.ts';
+import BeerModel from '../../models/BeerModel.ts';
 
 class BeerService implements IBeerService {
 

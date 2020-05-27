@@ -1,4 +1,4 @@
-import BeerModel from '../models/Beer-Model.ts';
+import BeerModel from '../models/BeerModel.ts';
 import Query from './Query.ts';
 
 interface IBeerRepository {

@@ -2,7 +2,7 @@ import { assertEquals } from "https://deno.land/std/testing/asserts.ts";
 import IBeerService from '../../src/services/beer/IBeerService.ts';
 import HttpTypeConverter from '../../src/services/TypeConverter/HttpTypeConverter.ts';
 import BeerController from '../../src/controllers/BeerController.ts';
-import BeerModel from '../../src/models/Beer-Model.ts';
+import BeerModel from '../../src/models/BeerModel.ts';
 import { v4 } from 'https://deno.land/std/uuid/mod.ts';
 import { Request, Response, RouteParams, Body } from 'https://deno.land/x/oak/mod.ts';
 import { mockBeerService, mockRequest, mockResponse, mockRouteParams } from '../helpers/unit-helpers.ts';
