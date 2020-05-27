@@ -1,6 +1,6 @@
 import { assertEquals } from "https://deno.land/std/testing/asserts.ts";
-import HttpTypeConverter from '../../../src/services/TypeConverter/HttpTypeConverter.ts';
-import ITypeConverter from '../../../src/services/TypeConverter/ITypeConverter.ts';
+import HttpTypeConverter from '../../../../src/services/TypeConverter/HttpTypeConverter.ts';
+import ITypeConverter from '../../../../src/services/TypeConverter/ITypeConverter.ts';
 
 const test = Deno.test;
 
