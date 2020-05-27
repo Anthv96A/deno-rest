@@ -1,6 +1,4 @@
 import { assertEquals } from "https://deno.land/std/testing/asserts.ts";
-import { mockRequest } from '../../helpers/unit-helpers.ts';
-import { Request, Body } from 'https://deno.land/x/oak/mod.ts';
 import HttpTypeConverter from '../../../src/services/TypeConverter/HttpTypeConverter.ts';
 import ITypeConverter from '../../../src/services/TypeConverter/ITypeConverter.ts';
 
@@ -17,13 +15,9 @@ test('It should converter request body to type and remove none existant types', 
         someExtraProperty: 'test'
     } as any;
 
-    const request = mockRequest((mock: Request) => {
-        mock.body = async () => await Promise.resolve({ value: mockType, type: 'json' } as Body) as any;
-    });
-
     const converter: ITypeConverter = new HttpTypeConverter();
 
-    const actual: TestType = await converter.convertToTypeAsync<TestType>(request, TestType);
+    const actual: TestType = await converter.convertToTypeAsync<TestType>(mockType, TestType);
 
     assertEquals(actual, expected);
 });
@@ -43,13 +37,9 @@ test('It should converter request body to type and remove none existant types on
         blah: 1
     } as any;
 
-    const request = mockRequest((mock: Request) => {
-        mock.body = async () => await Promise.resolve({ value: mockType, type: 'json' } as Body) as any;
-    });
-
     const converter: ITypeConverter = new HttpTypeConverter();
 
-    const actual: MoreComplexType = await converter.convertToTypeAsync<MoreComplexType>(request, MoreComplexType);
+    const actual: MoreComplexType = await converter.convertToTypeAsync<MoreComplexType>(mockType, MoreComplexType);
 
     assertEquals(actual, expected);
 });

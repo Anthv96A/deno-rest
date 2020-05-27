@@ -3,36 +3,40 @@ import ITypeConverter from '../services/TypeConverter/ITypeConverter.ts';
 import { Request, Response, RouteParams } from 'https://deno.land/x/oak/mod.ts';
 import BaseModel from '../models/BaseModel.ts';
 
-abstract class BaseController<T extends BaseModel, ISevice extends ICrudService<T>> {
+abstract class BaseController<T extends BaseModel, IService extends ICrudService<T>> {
 
     constructor(
-        protected readonly _service: ISevice,
+        protected readonly _service: IService,
         protected readonly _typeConverter: ITypeConverter
     ){}
 
     async createAsync({ response, request }: { response: Response, request: Request }){ 
-        const created: T = await this.onCreateAsync(request);
+        const body: any = await this.extractRequestBody(request);
+        const created: T = await this.onCreateAsync(body);
         
         response.status = 201;
         response.body = created;
     }
 
     async updateAsync({ response, request, params }: { response: Response, request: Request, params: RouteParams }){ 
-        const updated: T = await this.onUpdateAsync(request, params);
+        const body: any = await this.extractRequestBody(request);
+        const updated: T = await this.onUpdateAsync(body, params);
 
         response.status = 202;
         response.body = updated;
     }
 
     async deleteAsync({ response, params }: { response: Response, params: RouteParams }){ 
-        await this.onDeleteAsync(params);
+        const id = <string> params?.id;
+        await this.onDeleteOneAsync(id);
 
         response.status = 204;
         response.body = {};
     }
 
     async getOneAsync({ response, params }: { response: Response, params: RouteParams }){ 
-        const model: T = await this.onGetOneAsync(params);
+        const id = <string> params?.id;
+        const model: T = await this.onGetOneAsync(id);
 
         response.status = 200;
         response.body = model;
@@ -45,11 +49,15 @@ abstract class BaseController<T extends BaseModel, ISevice extends ICrudService<
         response.body = { resources: models };
     }
 
-    protected async abstract onCreateAsync(request: Request) : Promise<T>;
-    protected async abstract onUpdateAsync(request: Request, params: RouteParams) : Promise<T>;
-    protected async abstract onDeleteAsync(params: RouteParams): Promise<any>;
-    protected async abstract onGetOneAsync(params: RouteParams): Promise<T>;
+    protected async abstract onCreateAsync(body: any) : Promise<T>;
+    protected async abstract onUpdateAsync(body: any, params: RouteParams) : Promise<T>;
+    protected async abstract onDeleteOneAsync(id: string) : Promise<any>;
+    protected async abstract onGetOneAsync(id: string): Promise<T>;
     protected async abstract onGetAsync(): Promise<T[]>;
+
+    private async extractRequestBody(request: Request) : Promise<any> {
+        return (await request.body()).value;
+    }
 }
 
 export default BaseController;
