@@ -1,6 +1,5 @@
 import { MongoClient } from "https://deno.land/x/mongo@v0.7.0/mod.ts";
 
-
 class MongoDb {
     private readonly _dbName: string;
     private readonly _urlHost: string
@@ -23,7 +22,7 @@ class MongoDb {
     }
 }
 
-const dbName = Deno.env.get("DB_NAME") || "deno_test";
+const dbName = Deno.env.get("DB_NAME") || "deno_mongo";
 const dbHostUrl = Deno.env.get("DB_HOST_URL") || "mongodb://localhost:27017";
 
 const db = new MongoDb(dbName, dbHostUrl);

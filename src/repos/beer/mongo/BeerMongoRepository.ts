@@ -1,15 +1,14 @@
-import db from '../../clients/MongoClient.ts';
-import IBeerRepository from '../IBeerRepository.ts';
-import Query from '../Query.ts';
-import BeerModel from '../../models/BeerModel.ts';
-import { UpdateResult } from "https://deno.land/x/mongo@v0.7.0/mod.ts";
+import IBeerRepository from '../../IBeerRepository.ts';
+import Query from '../../Query.ts';
+import BeerModel from '../../../models/BeerModel.ts';
+import { UpdateResult, Collection } from "https://deno.land/x/mongo@v0.7.0/mod.ts";
 
-class MongoRepository implements IBeerRepository {
+class BeerMongoRepository implements IBeerRepository {
 
-    private readonly _beers: any;
+    private readonly _beers: Collection;
 
-    constructor(){
-        this._beers = db.getDatabase().collection('beers');
+    constructor(beers: Collection){
+        this._beers = beers;
     }
 
     async createBeerAsync(beer: BeerModel): Promise<BeerModel> {
@@ -33,7 +32,7 @@ class MongoRepository implements IBeerRepository {
     }
     async getBeerAsync(query: Query): Promise<BeerModel> {
         query.where = typeof query.where?._id === "string" ? {...query.where, _id: { '$oid': query.where._id }} : query.where;
-        const result = await this._beers.findOne(query.where);
+        const result: any = await this._beers.findOne(query.where);
         if(!result)
             throw new Error('Not found');
         return {
@@ -43,12 +42,13 @@ class MongoRepository implements IBeerRepository {
     }
     async getBeersAsync(): Promise<BeerModel[]> {
         try {
-            const result = await this._beers.find({}) as BeerModel[];
-            return result;
+            const results: any = await this._beers.find();
+            const promises: Promise<BeerModel>[] = results.map((r: any) => { return {...r, id: r._id.$oid }; });
+            return await Promise.all(promises);
         } catch (error) {
             throw error;
         }
     }
 }
 
-export default MongoRepository;
+export default BeerMongoRepository;
